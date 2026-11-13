@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Varun T G, CS undergrad at SRMIST: C++ and full-stack projects, an incoming AI/ML research internship at MSSRF, and the climb toward AI/ML engineering.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://varunclimbs.github.io/portfolio/">
+<meta property="og:title" content="Varun T G · The Long Climb">
+<meta property="og:description" content="Varun T G, CS undergrad at SRMIST: C++ and full-stack projects, an incoming AI/ML research internship at MSSRF, and the climb toward AI/ML engineering.">
+<meta name="twitter:card" content="summary">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<title>Varun T G · The Long Climb</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Instrument+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a fixed painted mountain behind the page; camp cards scroll past while the climber ascends through the timeline. */
+:root {
+  color-scheme: dark;
+  --ink: #0b141d;
+  --panel: rgba(11, 20, 29, .93);
+  --panel-solid: #101c28;
+  --line: rgba(190, 215, 230, .2);
+  --snow: #eef4f7;
+  --mist: #a9bbc7;
+  --hivis: #ffc72e;
+  --rope: #ff7a3d;
+  --glacier: #7fd0e8;
+  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --top: 52px;
+}
+* { box-sizing: border-box; }
+html { background: var(--ink); }
+body { background: var(--ink); color: var(--snow); font: 400 16px/1.55 var(--body); overflow-x: hidden; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--hivis); outline-offset: 2px; }
+a { color: var(--glacier); }
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+
+/* Top bar */
+.alti { position: fixed; z-index: 5; inset: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: var(--top); padding-top: env(safe-area-inset-top, 0px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--panel); border-bottom: 1px solid var(--line); }
+.alti b { font: 800 22px/1 var(--display); letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.readouts { display: flex; gap: clamp(12px, 3vw, 28px); flex: none; }
+.readout { display: grid; font-variant-numeric: tabular-nums; text-align: right; }
+.readout span { font: 400 10px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
+.readout strong { font: 800 21px/1.05 var(--display); letter-spacing: .02em; }
+#roAlt { color: var(--hivis); }
+.skip { flex: none; padding: 7px 11px; background: var(--hivis); color: var(--ink); border: 0; border-radius: 3px; font-weight: 700; font-size: 13px; }
+.skip:hover { background: #ffe07a; }
+
+
+/* Camps */
+main { position: relative; z-index: 2; pointer-events: none; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.camp { min-height: 170vh; padding-block: calc(var(--top) + 6vh) 0; }
+.camp:last-child { min-height: 100vh; padding-bottom: 60px; }
+.card { pointer-events: auto; width: min(500px, 100%); margin-left: clamp(0px, 5vw, 88px); padding: clamp(20px, 3vw, 30px); display: grid; gap: 18px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 4px; }
+.card > * { min-width: 0; }
+.eyebrow { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--glacier); font-variant-numeric: tabular-nums; }
+.here { color: var(--hivis); }
+h1, h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; line-height: .95; letter-spacing: .01em; margin: 6px 0 0; text-wrap: balance; }
+h1 { font-size: clamp(56px, 8vw, 88px); }
+h2 { font-size: clamp(40px, 6vw, 60px); }
+h3 { font: 600 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mist); margin: 0 0 8px; }
+p { margin: 0; max-width: 62ch; }
+.lede { font-size: 18px; font-weight: 500; }
+.points { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 400 12px/1 var(--mono); padding: 6px 8px; border: 1px solid var(--line); border-radius: 3px; }
+.ghost { background: transparent; border: 1px solid var(--glacier); color: var(--glacier); padding: 8px 12px; border-radius: 3px; font-weight: 600; }
+.ghost:hover { background: var(--glacier); color: var(--ink); }
+.contact { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.contact code { font: 500 15px var(--mono); user-select: all; overflow-wrap: anywhere; }
+.list-links a { margin-left: 6px; font-size: 13px; }
+.goals { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+a.ghost { text-decoration: none; display: inline-block; }
+.dl-note { font-size: 13px; color: var(--mist); }
+.goals li { padding-left: 14px; border-left: 2px solid var(--hivis); }
+
+/* Expandable projects */
+.routes { display: grid; gap: 6px; }
+details { border: 1px solid var(--line); border-radius: 3px; }
+summary { cursor: pointer; padding: 11px 12px; font-weight: 600; display: flex; justify-content: space-between; gap: 12px; }
+summary span { font: 400 11px/1.8 var(--mono); color: var(--mist); text-transform: uppercase; flex: none; }
+details[open] summary { border-bottom: 1px solid var(--line); }
+.route-body { padding: 12px; display: grid; gap: 10px; font-size: 15px; }
+
+/* Training wall */
+.wall { display: grid; gap: 12px; border-top: 1px solid var(--line); padding-top: 16px; }
+.wall-total { font-size: 15px; }
+.wall-total strong { font: 900 44px/1 var(--display); color: var(--hivis); margin-right: 6px; font-variant-numeric: tabular-nums; }
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.tabs button { padding: 9px 4px; background: transparent; border: 1px solid var(--line); border-radius: 3px; font-weight: 600; font-size: 13px; }
+.tabs button[aria-selected="true"] { background: var(--snow); color: var(--ink); border-color: var(--snow); }
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.stat { padding: 8px 10px; border: 1px solid var(--line); border-radius: 3px; }
+.stat span { display: block; font: 400 10px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mist); }
+.stat strong { font: 800 26px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.bars { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.bars li { display: grid; grid-template-columns: 128px minmax(0, 1fr) 30px; gap: 8px; align-items: center; font-size: 13px; }
+.bars .track { height: 8px; background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden; }
+.bars .fill { display: block; height: 100%; background: var(--hivis); border-radius: 2px; }
+.bars b { font: 500 12px var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.wall-note { font-size: 13px; color: var(--mist); }
+
+/* Camp map */
+.rail { position: fixed; z-index: 4; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(var(--top) + 22px); height: calc(100vh - var(--top) - 70px); max-height: 600px; width: 28px; }
+.rail::before { content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 2px; background: rgba(238, 244, 247, .55); }
+.rail button { position: absolute; right: 0; transform: translateY(50%); display: flex; align-items: center; justify-content: flex-end; gap: 6px; background: none; border: 0; padding: 4px 6px; white-space: nowrap; }
+.rail .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--ink); border: 2px solid var(--snow); flex: none; }
+.rail button.passed .dot { background: var(--hivis); border-color: var(--hivis); }
+.rail .label { font: 500 11px/1 var(--mono); padding: 5px 7px; background: var(--panel); border-radius: 3px; display: none; }
+.rail button:hover .label, .rail button:focus-visible .label, .rail button.star .label { display: block; }
+#marker { position: absolute; left: 9px; width: 10px; height: 10px; background: var(--rope); transform: translateY(50%) rotate(45deg); pointer-events: none; }
+
+/* What the climber says at each milestone */
+#bubble { position: fixed; z-index: 3; left: 0; top: 0; width: min(290px, 70vw); padding: 10px 13px; font-size: 14px; line-height: 1.4; background: var(--snow); color: var(--ink); border-radius: 4px; pointer-events: none; font-weight: 500;
+  transition: opacity .25s; }
+#bubble::after { content: ""; position: absolute; left: var(--tail, 50%); bottom: -7px; width: 14px; height: 14px; margin-left: -7px; background: var(--snow); transform: rotate(45deg); }
+#bubble .when { display: block; font: 500 11px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #8a5a00; margin-bottom: 2px; }
+#bubble .gear { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(11,20,29,.15); font-size: 13px; color: #35424d; }
+#bubble .gear b { color: var(--ink); }
+#bubble.caption { left: 0; right: 0; width: auto; top: calc(var(--top) + env(safe-area-inset-top, 0px)); transform: none !important; border-radius: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+#bubble.caption::after { display: none; }
+#bubble.fade { opacity: 0; }
+
+/* Skip the climb */
+#sumWrap, #pdfWrap { position: fixed; inset: 0; z-index: 8; overflow: auto; background: rgba(5, 10, 16, .78);
+  padding: calc(var(--top) + 16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.sum { max-width: 720px; margin: 0 auto; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 4px; padding: clamp(20px, 4vw, 34px); display: grid; gap: 22px; }
+.sum > * { min-width: 0; }
+#pdfPages { display: grid; gap: 12px; }
+#pdfPages canvas { display: block; width: 100%; height: auto; background: #fff; border-radius: 2px; }
+.sum header { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.sum h2 { font-size: clamp(40px, 7vw, 64px); }
+.close { background: transparent; border: 1px solid var(--line); border-radius: 3px; padding: 4px 8px; font-size: 13px; }
+.facts { display: grid; gap: 8px; margin: 0; }
+.facts div { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 10px; }
+.facts dt { font: 500 12px/1.6 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--glacier); }
+.facts dd { margin: 0; }
+.sum-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 22px; }
+.sum-projects { display: grid; gap: 12px; }
+.sum-projects strong { display: block; }
+.sum-projects p { font-size: 14px; color: var(--mist); }
+
+@media (max-width: 859px) {
+  .alti b { font-size: 18px; }
+  .readout strong { font-size: 18px; }
+  .card { margin-left: 0; width: 100%; }
+  .camp { min-height: 190vh; }
+  .camp:last-child { min-height: 100vh; padding-bottom: 50vh; }
+  .rail { display: none; }
+}
+@media (max-width: 419px) {
+  .alti b { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #bubble { transition: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<div class="alti">
+  <b id="brand"></b>
+  <button class="skip" type="button" id="skipBtn" aria-haspopup="dialog">Summary</button>
+  <div class="readouts">
+    <div class="readout"><span>Date</span><strong id="roDate">2022</strong></div>
+    <div class="readout"><span>Altitude</span><strong id="roAlt">0 m</strong></div>
+  </div>
+</div>
+
+<main id="route"></main>
+<div id="pdfWrap" hidden><section class="sum" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
+  <header><h2 id="pdfTitle">Resume</h2><div class="contact"><a class="ghost" href="#" data-resume-dl>Download</a><span class="dl-note" role="status"></span><button class="close" type="button" id="pdfClose">Close</button></div></header>
+  <div id="pdfPages"></div>
+</section></div>
+<div id="sumWrap" hidden><section class="sum" role="dialog" aria-modal="true" aria-labelledby="sumTitle" id="sumPanel"></section></div>
+<nav class="rail" id="rail" aria-label="Camp map"><span id="marker"></span></nav>
+<div id="bubble" role="status" aria-live="polite" hidden></div>
+
+<script>
+/* ==========================================================================
+   YOUR PORTFOLIO. Edit everything in this CLIMB block.
+   Dates are "YYYY-MM-DD", "YYYY-MM", or "YYYY" when the month isn't known.
+   ========================================================================== */
+const CLIMB = {
+  name: "Varun T G",
+  email: "varuntg156@gmail.com",
+  links: [
+    { label: "GitHub", url: "https://github.com/StackVarun" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/varuntg156/" },
+    { label: "LeetCode", url: "https://leetcode.com/u/vtg__init/share/H2DLIDARD_9T1Cpuk6wAsLmrSpvVlAmR" },
+    { label: "GeeksforGeeks", url: "https://www.geeksforgeeks.org/profile/varunt706k?tab=activity" },
+    { label: "CodeChef", url: "https://www.codechef.com/users/varuntg_156" }
+  ],
+  /* Your resume PDF. "url" is filled in when the PDF is uploaded to the page. */
+  resume: { url: "Varun_TG_Resume.pdf", filename: "Varun_TG_Resume.pdf" },
+  /* After this month the date readout says "Ahead" */
+  lastDated: "2026-12",
+
+  /* What the climber says as he passes each month. "gear" upgrades what he carries. */
+  timeline: [
+    { date: "2022", text: "Class X, CBSE: 96%.", gear: { boots: 1, axe: 1 }, gearNote: "Trail shoes and a walking stick" },
+    { date: "2024", text: "Class XII, PCM with Computer Science: 93.8%." },
+    { date: "2025-05", text: "Won a 25% merit scholarship to SRM from my SRMJEEE rank." },
+    { date: "2025-08", text: "Started designing Voyager for Smart India Hackathon 2025, in a team of six.", gear: { rope: 1 }, gearNote: "A first rope, for teamwork" },
+    { date: "2025-09", text: "Joined Techvayuna's data and web teams: Pandas, NumPy and MySQL.", gear: { axe: 2, boots: 2 }, gearNote: "Trekking pole and hiking boots" },
+    { date: "2025", at: "2025-11", text: "2nd place at Idearena '25, pitching Voyager." },
+    { date: "2026-02", text: "Top 84 of 400+ teams at THREX, and 3rd place at AXIORA '26.", gear: { rope: 2 }, gearNote: "Climbing rope and a helmet" },
+    { date: "2026-04", text: "Finished NPTEL Python for Data Science from IIT Madras: Elite + Silver." },
+    { date: "2026-05", text: "Finished NPTEL Modern C++ (IIT Kharagpur) and Joy of Computing (IIT Ropar, Gold, 94%).", gear: { axe: 3 }, gearNote: "A steel ice axe: C++" },
+    { date: "2026-06", text: "Started my web internship at Oasis Infobyte, and led Hushaar AI at Confluence 2.0.", gear: { boots: 3, rope: 3 }, gearNote: "Crampons and a harness, for leading a team" },
+    { date: "2026-07", text: "Shipped Cakewalk and Cyber Sip on GitHub Pages." },
+    { date: "2026-09", text: "Built the phishing email model for HackGenix, and joined the GeeksforGeeks campus body.", gear: { axe: 4, lamp: 1 }, gearNote: "A technical ice tool and a headlamp: my first ML" },
+    { date: "2026-10-02", text: "SkillBridge placed 4th at Code2Web BUILD_A_THON." },
+    { date: "2026-10-18", text: "Built Process Scheduler: nine CPU scheduling algorithms with tests." },
+    
+    { date: "2026-11", text: "Now: 177 LeetCode problems, a CodeChef 1★ rating and five Elite NPTEL certificates.", gear: { oxygen: 1 }, gearNote: "An oxygen tank: consistency" },
+    { date: "2026-12", text: "Starting my research internship at MSSRF: AI/ML for geospatial and climate data.", gear: { gps: 1, boots: 4 }, gearNote: "A GPS and summit boots, for research" },
+    { date: "2029-06", label: "The summit", text: "AI/ML Engineer. This is where I'm headed.", gear: { flag: 1 } }
+  ],
+
+  /* The one-screen summary for recruiters */
+  summary: {
+    role: "Software engineer in training, heading for AI/ML",
+    facts: [
+      ["Now", "B.Tech CSE at SRMIST, 2025 to 2029, CGPA 10.0"],
+      ["Next", "Research Intern, GIS and Remote Sensing, M. S. Swaminathan Research Foundation, from Dec 2026"],
+      ["Before", "Web Development and Design Intern, Oasis Infobyte, Jun to Jul 2026"]
+    ],
+    skills: ["C++ (primary)", "Python", "JavaScript", "C", "SQL", "Data structures and algorithms", "React", "Flask", "REST APIs", "PostgreSQL", "scikit-learn", "Pandas", "Git", "pytest"],
+    highlights: ["2nd at Idearena 2025, 3rd at AXIORA 2026, 4th at Code2Web BUILD_A_THON", "Top 84 of 400+ teams at THREX Hackathon 2026", "Five NPTEL certificates from IIT Kharagpur, IIT Ropar and IIT Madras, all Elite"]
+  },
+
+  /* Each camp is a card. "date" places the camp on the timeline. */
+  camps: [
+    {
+      name: "Base Camp", alt: 0, date: "2022-01", when: "2022 to 2024", title: "Varun T G",
+      lede: "CS undergrad at SRM. I build in C++ and full stack, and I'm climbing toward AI/ML engineering.",
+      text: "Scroll to climb through my timeline. Watch what I say and carry along the way.",
+      points: ["Class X, CBSE: 96% (2022)", "Class XII, PCM with Computer Science: 93.8% (2024)"],
+      resume: true
+    },
+    {
+      name: "Camp 1", alt: 1400, date: "2025-05", when: "2025", title: "Learning the terrain",
+      points: ["B.Tech CSE at SRMIST Ramapuram, 2025 to 2029: CGPA 10.0", "25% merit scholarship, worth INR 75,000 a year", "Techvayuna tech team, Sep 2025 to Jan 2026: data analysis with Pandas, NumPy and Excel, plus MySQL schemas and queries", "Smart India Hackathon 2025: designed Voyager's user flows and Figma prototypes"]
+    },
+    {
+      name: "Camp 2", alt: 3000, date: "2026-02", when: "Feb to Jul 2026", title: "The training wall",
+      points: ["Web Development and Design Intern, Oasis Infobyte, Jun to Jul 2026: built three web apps from scratch", "Competitive programming member, GeeksforGeeks campus body at SRMIST, Sep 2026 to now"],
+      training: {
+        asOf: "13 Nov 2026",
+        sites: [
+          { name: "LeetCode", url: "https://leetcode.com/u/vtg__init/share/H2DLIDARD_9T1Cpuk6wAsLmrSpvVlAmR", solved: 177,
+            stats: [["Solved", "177"], ["Easy", "147"], ["Medium", "28"], ["Hard", "2"], ["Active days", "78"], ["Best streak", "19 days"]],
+            note: "174 of them in C++. Earned the 50 Days Badge 2026.",
+            topics: [["Arrays", 91], ["Math", 62], ["Strings", 36], ["Hash table", 35], ["Two pointers", 24], ["Binary search", 14], ["Bit manipulation", 11], ["Dynamic programming", 5]] },
+          { name: "GeeksforGeeks", url: "https://www.geeksforgeeks.org/profile/varunt706k?tab=activity", solved: 92,
+            stats: [["Solved", "92"], ["Coding score", "112"], ["Basic", "74"], ["Easy", "17"], ["Medium", "1"]],
+            note: "Practising through the GeeksforGeeks campus body at SRM." },
+          { name: "CodeChef", url: "https://www.codechef.com/users/varuntg_156", solved: 24,
+            stats: [["Rating", "1★"], ["Highest", "1240"], ["Rated contests", "3"], ["Solved", "24"]],
+            note: "Rated in CodeChef Starters, Division 4." }
+        ]
+      },
+      lists: [{ title: "NPTEL certificates, May to Nov 2026", items: [
+        { text: "Programming in Modern C++, IIT Kharagpur: Elite", url: "https://nptel.ac.in/noc/E_Certificate/NPTEL26CS52S108580918905011708" },
+        { text: "Operating System Fundamentals, IIT Kharagpur: Elite" },
+        { text: "The Joy of Computing Using Python, IIT Ropar: Elite + Gold, 94%", url: "https://nptel.ac.in/noc/E_Certificate/NPTEL26CS84S45030280405011708" },
+        { text: "Python for Data Science, IIT Madras: Elite + Silver", url: "https://nptel.ac.in/noc/E_Certificate/NOC26CS80S28040618003212517" },
+        { text: "Design Thinking: A Primer, IIT Madras: Elite + Silver" }
+      ]}]
+    },
+    {
+      name: "Camp 3", alt: 4700, date: "2026-08", when: "Aug to Nov 2026", here: true, title: "Projects",
+      projects: [
+        { name: "Process Scheduler", tag: "Systems", featured: true, text: "A CPU scheduling simulator with nine algorithms, including FCFS, SJF, SRTF, priority, Round Robin, HRRN, MLQ and MLFQ, with preemptive variants. It draws Gantt charts, computes turnaround, waiting and response times, compares algorithms side by side and exports CSV. Node.js tests check the scheduling logic.", tech: ["JavaScript", "Node.js", "HTML5", "CSS3"], links: [{ label: "Open it", url: "https://stackvarun.github.io/process-scheduler/" }, { label: "See the code", url: "https://github.com/StackVarun/process-scheduler" }] },
+        { name: "SkillBridge", tag: "Full stack · 4th place", featured: true, text: "A portal with student, industry, faculty and institution workspaces, co-built with a team of three. It placed 4th at Code2Web BUILD_A_THON. I implemented weighted skill-to-job matching and gap analysis with JWT authentication, tested with pytest and Vitest. The team built it with AI assistance.", tech: ["React", "Flask", "SQLAlchemy", "PostgreSQL", "JWT"], links: [{ label: "See the code", url: "https://github.com/StackVarun/skillbridge" }, { label: "LinkedIn post", url: "https://lnkd.in/p/dXquScfM" }] },
+        { name: "HackGenix", tag: "Machine learning", featured: true, text: "A team phishing-detection system built for Techno Summit '26. I built the email model and added phishing URL data. The text classifier uses TF-IDF with logistic regression, and its split guards against data leakage.", tech: ["Python", "scikit-learn", "TF-IDF", "FastAPI"], links: [{ label: "See the code", url: "https://github.com/StackVarun/HackGenix" }] },
+        { name: "Hushaar AI", tag: "AI + IoT", text: "I led a team of three at Confluence 2.0. The dashboard predicts heatwaves from live weather data and queues pre-cooling commands over MQTT. It's deployed on Vercel, and the ESP32 hardware layer is simulated for now.", tech: ["React", "TypeScript", "Tailwind CSS", "MQTT"], links: [{ label: "Open it", url: "https://hushaar-ai-six.vercel.app/" }, { label: "See the code", url: "https://github.com/StackVarun/Hushaar-AI" }] },
+        { name: "Voyager", tag: "Product design", text: "An AI-assisted travel planner. I designed its user flows and Figma prototypes for SIH 2025, then pitched it with a team of three to win 2nd at Idearena 2025 and 3rd at AXIORA 2026.", tech: ["Figma", "UI/UX"], links: [{ label: "Prototype", url: "https://boots-eagle-14542674.figma.site/" }, { label: "See the code", url: "https://github.com/StackVarun/Voyager" }] },
+        { name: "Responsive web builds", tag: "Web", text: "Cakewalk and Cyber Sip landing pages, plus Swiggy and Spotify interface clones, built with Flexbox and CSS Grid and hosted on GitHub Pages.", tech: ["HTML5", "CSS3", "JavaScript"], links: [{ label: "Cakewalk", url: "https://stackvarun.github.io/cake-website/" }, { label: "Cyber Sip", url: "https://stackvarun.github.io/coffee-shop/" }, { label: "Swiggy", url: "https://stackvarun.github.io/swiggy-clone/" }, { label: "Spotify", url: "https://stackvarun.github.io/spotify-clone/" }] }
+      ],
+      lists: [{ title: "Awards", items: [
+        { text: "2nd place, Idearena 2025 at SRMIST, pitching Voyager" },
+        { text: "3rd place, AXIORA 2026 Ideathon, presenting Voyager" },
+        { text: "4th place, Code2Web BUILD_A_THON, with special appreciation from the judges for SkillBridge", url: "https://lnkd.in/p/dXquScfM" },
+        { text: "Top 84 of 400+ teams, THREX Hackathon 2026" }
+      ]}]
+    },
+    {
+      name: "Camp 4", alt: 6300, date: "2026-12", when: "From Dec 2026", title: "Next: research at MSSRF",
+      text: "I've been selected for an on-site research internship at the M. S. Swaminathan Research Foundation in Chennai, applying AI/ML techniques to geospatial analysis and climate studies.",
+      points: ["Research Intern, GIS and Remote Sensing", "Chennai, starting December 2026"]
+    },
+    {
+      name: "Summit", alt: 8848, date: "2029-06", when: "Ahead", title: "AI/ML Engineer",
+      text: "This is where I'm headed: building machine learning systems that solve real problems. Every tool in my pack is for getting here.",
+      resume: true,
+      contact: true
+    }
+  ]
+};
+
+/* --- Page build --- */
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString("en-US");
+const camps = CLIMB.camps;
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/* Timeline maths: a month index, and the altitude each month sits at */
+const monthOf = d => { const [y, m, day] = d.split("-").map(Number); return y * 12 + (m ? m - 1 + (day ? (day - 1) / 31 : 0) : 6); };
+const anchors = camps.map(c => ({ m: monthOf(c.date), alt: c.alt }));
+function altOfMonth(m) {
+  if (m <= anchors[0].m) return 0;
+  for (let i = 1; i < anchors.length; i++) {
+    const a = anchors[i - 1], b = anchors[i];
+    if (m <= b.m) return a.alt + (b.alt - a.alt) * (m - a.m) / (b.m - a.m);
+  }
+  return 8848;
+}
+function monthOfAlt(alt) {
+  for (let i = 1; i < anchors.length; i++) {
+    const a = anchors[i - 1], b = anchors[i];
+    if (alt <= b.alt) return a.m + (b.m - a.m) * (alt - a.alt) / (b.alt - a.alt);
+  }
+  return anchors[anchors.length - 1].m;
+}
+const label = d => d.includes("-") ? `${MON[+d.split("-")[1] - 1]} ${d.split("-")[0]}` : d;
+const milestones = CLIMB.timeline.map(t => ({ ...t, alt: altOfMonth(monthOf(t.at || t.date)), when: t.label || label(t.date) })).sort((a, b) => a.alt - b.alt);
+
+const chips = list => `<div class="chips">${list.map(t => `<span class="chip">${t}</span>`).join("")}</div>`;
+const linkList = links => links.map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join("");
+const linkRow = links => links && links.length ? `<div class="contact">${linkList(links)}</div>` : "";
+function routeList(items) {
+  return `<div class="routes">${items.map(p => `<details><summary>${p.name}<span>${p.tag}</span></summary><div class="route-body"><p>${p.text}</p>${p.tech ? chips(p.tech) : ""}${linkRow(p.links)}</div></details>`).join("")}</div>`;
+}
+function listBlock(l) {
+  return `<div><h3>${l.title}</h3><ul class="points list-links">${l.items.map(it => `<li>${it.text}${it.url ? ` <a href="${it.url}" target="_blank" rel="noopener">Proof</a>` : ""}</li>`).join("")}</ul></div>`;
+}
+function trainingBlock(t) {
+  const total = t.sites.reduce((n, s) => n + s.solved, 0);
+  return `<div class="wall"><h3 style="margin:0">Coding practice · as of ${t.asOf}</h3>
+    <p class="wall-total"><strong>${total}</strong>problems solved across ${t.sites.length} sites</p>
+    <div class="tabs" role="tablist" aria-label="Coding sites">${t.sites.map((s, i) => `<button type="button" role="tab" id="wallTab${i}" aria-controls="wallPanel" data-site="${i}">${s.name}</button>`).join("")}</div>
+    <div id="wallPanel" role="tabpanel"></div></div>`;
+}
+const resumeRow = () => `<div><h3>Resume (PDF)</h3><div class="contact"><button class="ghost" type="button" data-resume-view>View</button><a class="ghost" href="#" data-resume-dl>Download</a><span class="dl-note" role="status"></span></div></div>`;
+const contactBlock = () => `<div><h3>Get in touch</h3><div class="contact"><code>${CLIMB.email}</code><button class="ghost" type="button" data-copy>Copy email</button>${linkList(CLIMB.links)}</div></div>`;
+
+$("brand").textContent = CLIMB.name;
+$("route").innerHTML = camps.map((c, i) => {
+  const heading = i === 0 ? `<h1>${c.title}</h1>` : `<h2>${c.title}</h2>`;
+  return `<section class="camp" id="camp${i}" aria-label="${c.name}"><div class="card">
+    <div><div class="eyebrow">${c.here ? `<span class="here">You are here</span> · ` : ""}${c.name} · ${fmt(c.alt)} m · ${c.when}</div>${heading}</div>
+    ${c.lede ? `<p class="lede">${c.lede}</p>` : ""}
+    ${c.text ? `<p>${c.text}</p>` : ""}
+    ${c.points ? `<ul class="points">${c.points.map(p => `<li>${p}</li>`).join("")}</ul>` : ""}
+    ${c.training ? trainingBlock(c.training) : ""}
+    ${c.projects ? routeList(c.projects) : ""}
+    ${c.lists ? c.lists.map(listBlock).join("") : ""}
+    ${c.resume ? resumeRow() : ""}
+    ${c.contact ? contactBlock() : ""}
+  </div></section>`;
+}).join("");
+
+/* Copy-email buttons */
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-copy]");
+  if (!b) return;
+  try { await navigator.clipboard.writeText(CLIMB.email); b.textContent = "Copied"; }
+  catch { getSelection().selectAllChildren(b.previousElementSibling); b.textContent = "Press copy"; }
+  setTimeout(() => b.textContent = "Copy email", 1800);
+});
+
+/* Resume: View opens the PDF in a new tab. Download goes through the viewer's
+   save prompt on claude.ai, and is a plain download link anywhere else. */
+const RES = CLIMB.resume;
+document.querySelectorAll("[data-resume-dl]").forEach(a => { a.href = RES.url; a.setAttribute("download", RES.filename); });
+if (window.claude && window.claude.use) {
+  window.claude.use("downloads").then(dl => {
+    document.querySelectorAll("[data-resume-dl]").forEach(a => {
+      if (!dl) { a.hidden = true; return; }
+      a.addEventListener("click", async e => {
+        e.preventDefault();
+        const note = a.parentElement.querySelector(".dl-note");
+        try {
+          const blob = await (await fetch(RES.url)).blob();
+          await dl.save({ filename: RES.filename, data: blob });
+          note.textContent = "Saved.";
+        } catch (err) {
+          note.textContent = err && err.code === "declined" ? "" : "The download didn't start. Use View instead.";
+        }
+      });
+    });
+  });
+}
+
+/* The resume reader: PDF.js draws each page onto a canvas, loaded the first time someone opens it */
+const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+const loadScript = src => new Promise((ok, fail) => { const el = document.createElement("script"); el.src = src; el.onload = ok; el.onerror = fail; document.head.appendChild(el); });
+let pdfDrawn = false, pdfReturn = null;
+async function openResume() {
+  pdfReturn = document.activeElement;
+  $("pdfWrap").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("pdfClose").focus();
+  if (pdfDrawn) return;
+  const box = $("pdfPages");
+  box.innerHTML = `<p class="wall-note">Loading the resume…</p>`;
+  try {
+    if (!window.pdfjsLib) { await loadScript(PDFJS + "pdf.min.js"); await loadScript(PDFJS + "pdf.worker.min.js"); }
+    pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
+    const data = await (await fetch(RES.url)).arrayBuffer();
+    const doc = await pdfjsLib.getDocument({ data }).promise;
+    box.innerHTML = "";
+    const width = Math.min(box.clientWidth || 660, 900) * Math.min(devicePixelRatio || 1, 2);
+    for (let n = 1; n <= doc.numPages; n++) {
+      const page = await doc.getPage(n);
+      const vp = page.getViewport({ scale: width / page.getViewport({ scale: 1 }).width });
+      const c = document.createElement("canvas");
+      c.width = vp.width; c.height = vp.height;
+      c.setAttribute("role", "img"); c.setAttribute("aria-label", `Resume, page ${n} of ${doc.numPages}`);
+      box.appendChild(c);
+      await page.render({ canvasContext: c.getContext("2d"), viewport: vp }).promise;
+    }
+    pdfDrawn = true;
+  } catch {
+    box.innerHTML = `<p class="wall-note">The resume couldn't be shown here. Use Download instead.</p>`;
+  }
+}
+function closeResume() {
+  if ($("pdfWrap").hidden) return;
+  $("pdfWrap").hidden = true;
+  document.body.style.overflow = "";
+  if (pdfReturn && pdfReturn.focus) pdfReturn.focus();
+}
+document.addEventListener("click", e => { if (e.target.closest("[data-resume-view]")) { closeSummary(); openResume(); } });
+$("pdfClose").onclick = closeResume;
+$("pdfWrap").addEventListener("click", e => { if (e.target.id === "pdfWrap") closeResume(); });
+
+/* Coding practice tabs */
+const wallCamp = camps.find(c => c.training);
+function showSite(i) {
+  const s = wallCamp.training.sites[i], max = s.topics ? Math.max(...s.topics.map(t => t[1])) : 1;
+  document.querySelectorAll("[data-site]").forEach(b => { const on = +b.dataset.site === i; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; });
+  $("wallPanel").setAttribute("aria-labelledby", "wallTab" + i);
+  $("wallPanel").innerHTML = `<div style="display:grid;gap:12px"><div class="stats">${s.stats.map(([k, v]) => `<div class="stat"><span>${k}</span><strong>${v}</strong></div>`).join("")}</div>
+    ${s.topics ? `<div><h3>Solved by topic</h3><ul class="bars">${s.topics.map(([k, v]) => `<li><span>${k}</span><span class="track"><span class="fill" style="width:${(v / max * 100).toFixed(1)}%"></span></span><b>${v}</b></li>`).join("")}</ul></div>` : ""}
+    <p class="wall-note">${s.note} <a href="${s.url}" target="_blank" rel="noopener">See my ${s.name} profile</a></p></div>`;
+}
+if (wallCamp) {
+  const tabs = document.querySelector(".tabs");
+  tabs.addEventListener("click", e => { const b = e.target.closest("[data-site]"); if (b) showSite(+b.dataset.site); });
+  tabs.addEventListener("keydown", e => {
+    const n = wallCamp.training.sites.length, cur = +document.querySelector('[data-site][aria-selected="true"]').dataset.site;
+    const next = e.key === "ArrowRight" ? (cur + 1) % n : e.key === "ArrowLeft" ? (cur + n - 1) % n : -1;
+    if (next < 0) return;
+    e.preventDefault(); showSite(next); $("wallTab" + next).focus();
+  });
+  showSite(0);
+}
+
+/* Summary: everything on one screen */
+const sm = CLIMB.summary;
+const featured = camps.flatMap(c => c.projects || []).filter(p => p.featured);
+$("sumPanel").innerHTML = `<header><div><div class="eyebrow">${sm.role}</div><h2 id="sumTitle">${CLIMB.name}</h2></div><button class="close" type="button" id="sumClose">Back to the climb</button></header>
+  <dl class="facts">${sm.facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+  <div class="sum-grid">
+    <div><h3>Best projects</h3><div class="sum-projects">${featured.map(p => `<div><strong>${p.name}</strong><p>${p.text.split(". ")[0]}.</p>${linkRow(p.links)}</div>`).join("")}</div></div>
+    <div style="display:grid;gap:18px;align-content:start">
+      <div><h3>Skills</h3>${chips(sm.skills)}</div>
+      ${wallCamp ? `<div><h3>Coding practice</h3><p>${wallCamp.training.sites.map(s => `${s.name}: ${s.stats[0][1]}${s.name === "CodeChef" ? "" : " solved"}`).join(" · ")}</p></div>` : ""}
+      <div><h3>Highlights</h3><ul class="points">${sm.highlights.map(h => `<li>${h}</li>`).join("")}</ul></div>
+    </div>
+  </div>
+  ${resumeRow()}
+  ${contactBlock()}`;
+let sumReturn = null;
+function openSummary() {
+  sumReturn = document.activeElement;
+  $("sumWrap").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("sumClose").focus();
+}
+function closeSummary() {
+  if ($("sumWrap").hidden) return;
+  $("sumWrap").hidden = true;
+  document.body.style.overflow = "";
+  if (sumReturn && sumReturn.focus) sumReturn.focus();
+}
+$("skipBtn").onclick = openSummary;
+$("sumClose").onclick = closeSummary;
+$("sumWrap").addEventListener("click", e => { if (e.target.id === "sumWrap") closeSummary(); });
+$("sumWrap").addEventListener("keydown", e => {
+  if (e.key !== "Tab") return;
+  const f = [...$("sumPanel").querySelectorAll("a, button")], first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+addEventListener("keydown", e => { if (e.key === "Escape") { closeResume(); closeSummary(); } });
+
+/* Camp map */
+$("rail").insertAdjacentHTML("beforeend", camps.map((c, i) => `<button type="button" data-camp="${i}" class="${c.here ? "star" : ""}" style="bottom:${c.alt / 88.48}%" aria-label="Go to ${c.name}, ${c.when}"><span class="label">${c.here ? "Now: " : ""}${c.name}</span><span class="dot"></span></button>`).join(""));
+$("rail").addEventListener("click", e => { const b = e.target.closest("[data-camp]"); if (b) goCamp(+b.dataset.camp); });
+
+/* --- Scroll maps to altitude --- */
+let knots = [];
+function measure() {
+  const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  knots = camps.map((c, i) => ({ y: i ? Math.min($("camp" + i).offsetTop, max) : 0, alt: c.alt }));
+  for (let i = 1; i < knots.length; i++) knots[i].y = Math.max(knots[i].y, knots[i - 1].y + 1);
+}
+function altFromScroll() {
+  const y = scrollY;
+  for (let i = 1; i < knots.length; i++) {
+    if (y <= knots[i].y) return knots[i - 1].alt + (knots[i].alt - knots[i - 1].alt) * Math.max(0, y - knots[i - 1].y) / (knots[i].y - knots[i - 1].y);
+  }
+  return 8848;
+}
+function goCamp(i) { scrollTo({ top: knots[i].y, behavior: REDUCED ? "auto" : "smooth" }); }
+new ResizeObserver(measure).observe($("route"));
+addEventListener("resize", () => { resize(); measure(); });
+
+/* Gear the climber carries at a given altitude: whatever the timeline has given him so far */
+const GEAR_KEYS = ["axe", "boots", "rope", "lamp", "oxygen", "gps", "flag"];
+let gearNow = {};
+function gearAt(a) {
+  const out = {};
+  for (const m of milestones) if (m.alt <= a + 1 && m.gear) Object.assign(out, m.gear);
+  return out;
+}
+const levelOf = k => gearNow[k] || 0;
+const gearKeys = GEAR_KEYS;
+
+/* --- World --- */
+const K = .9, WORLD_H = 8848 * K, STEP = 4;
+const slopeAt = y => .3 + 1.05 * Math.pow(Math.max(0, y) / WORLD_H, 1.4);
+const table = [0];
+{ let y = 0; while (y < WORLD_H) { y += slopeAt(y) * STEP; table.push(Math.min(y, WORLD_H)); } }
+const SUMMIT_X = (table.length - 1) * STEP;
+function baseY(x) {
+  if (x <= 0) return x * .12;
+  if (x >= SUMMIT_X) return WORLD_H - (x - SUMMIT_X) * 1.5;
+  const f = x / STEP, i = Math.floor(f);
+  return table[i] + (table[i + 1] - table[i]) * (f - i);
+}
+function xForY(y) {
+  let lo = 0, hi = table.length - 1;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (table[m] < y) lo = m; else hi = m; }
+  const d = table[hi] - table[lo];
+  return (lo + (d ? (y - table[lo]) / d : 0)) * STEP;
+}
+const campX = camps.map(c => xForY(c.alt * K));
+function surf(x) {
+  const y = baseY(x), frac = Math.max(0, Math.min(1, y / WORLD_H));
+  let taper = Math.min(1, Math.abs(SUMMIT_X - x) / 420);
+  for (const c of campX) { const d = Math.abs(x - c); if (d < 170) taper = Math.min(taper, d / 170); }
+  const n = Math.sin(x * .013) + .6 * Math.sin(x * .031 + 1.3) + .35 * Math.sin(x * .071 + 4) + frac * .5 * Math.abs(Math.sin(x * .11));
+  return y + n * (9 + 34 * frac) * taper;
+}
+const hash = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+/* Colour ramps */
+const rgb = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+const css = (c, a = 1) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+function ramp(stops, a) {
+  if (a <= stops[0][0]) return stops[0].slice(1);
+  for (let i = 1; i < stops.length; i++) if (a <= stops[i][0]) {
+    const t = (a - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0]);
+    return stops[i].slice(1).map((c, j) => mix(stops[i - 1][j + 1], c, t));
+  }
+  return stops[stops.length - 1].slice(1);
+}
+const SKY = [[0, "#3a5a8c", "#e9a07c", "#ffd9a8"], [1800, "#2a78bf", "#7dbde6", "#d5eef5"], [4000, "#1d5ba6", "#5d9fd6", "#bfdff0"], [6200, "#12346f", "#3a6ea8", "#9bbfdc"], [7600, "#0a1a45", "#22427f", "#6a8cb8"], [8848, "#040820", "#27306b", "#f08f62"]]
+  .map(s => [s[0], rgb(s[1]), rgb(s[2]), rgb(s[3])]);
+const BIOME = [[0, "#3f7a4e"], [1500, "#33654a"], [2800, "#5a6a55"], [3600, "#6b6560"], [5000, "#7d8088"], [5900, "#b4c0c9"], [6700, "#dfe8ee"], [8848, "#f7fbff"]].map(s => [s[0], rgb(s[1])]);
+const smooth = (a, b, v) => { const t = Math.max(0, Math.min(1, (v - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+/* --- Rendering --- */
+const cv = $("scene"), g = cv.getContext("2d");
+let W = 0, H = 0, alt = 0, walk = 0, clock = 0, swingT = 0;
+const cl = { sx: 0, sy: 0, s: 1, x: 0, y: 0 };
+const particles = [];
+const flakes = Array.from({ length: 130 }, (_, i) => ({ x: hash(i), y: hash(i + 500), z: .4 + hash(i + 900) * .6 }));
+
+function resize() {
+  const d = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * d; cv.height = H * d;
+  g.setTransform(d, 0, 0, d, 0, 0);
+}
+function burst(x, y, color, n, power) {
+  if (REDUCED) return;
+  for (let i = 0; i < n; i++) {
+    const a = hash(i + clock) * Math.PI * 2, v = power * (.3 + hash(i * 3 + clock) * .7);
+    particles.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1.5, life: 1, color, r: 2 + hash(i + 7) * 2.5 });
+  }
+}
+let camXNow = 0;
+function ridge(x, seed, amp) {
+  return (Math.abs(Math.sin(x * .0041 + seed)) * 1 + Math.abs(Math.sin(x * .0097 + seed * 2.1)) * .55 + Math.abs(Math.sin(x * .023 + seed * 3.3)) * .22) * amp;
+}
+function cloud(x, y, sc, alpha) {
+  g.fillStyle = `rgba(255,255,255,${alpha})`;
+  for (const [dx, dy, rx, ry] of [[0, 0, 70, 20], [-55, 7, 48, 14], [58, 6, 54, 15], [14, -13, 40, 16]]) {
+    g.beginPath(); g.ellipse(x + dx * sc, y + dy * sc, rx * sc, ry * sc, 0, 0, 7); g.fill();
+  }
+}
+function tent(x, y, s, color) {
+  g.fillStyle = color;
+  g.beginPath(); g.moveTo(x - 30 * s, y); g.lineTo(x, y - 30 * s); g.lineTo(x + 30 * s, y); g.fill();
+  g.fillStyle = "rgba(0,0,0,.35)";
+  g.beginPath(); g.moveTo(x - 7 * s, y); g.lineTo(x, y - 18 * s); g.lineTo(x + 7 * s, y); g.fill();
+}
+function campProps(i, s) {
+  const x = campX[i] - camXNow, ground = wx => cl.sy - (surf(wx) - cl.y);
+  if (x < -260 || x > W + 260) return;
+  const left = campX[i] - 58, y0 = ground(left);
+  tent(left - camXNow, y0 + 2, s, i === camps.length - 1 ? "rgba(0,0,0,0)" : "#e2622f");
+  if (i === 0) { tent(left - 78 - camXNow, ground(left - 78) + 2, s * .8, "#2f8fa8"); tent(left - 140 - camXNow, ground(left - 140) + 2, s * .9, "#d9a72b"); }
+  /* signpost */
+  const px = campX[i] - 16, py = ground(px), sx = px - camXNow;
+  g.fillStyle = "#3b2a1c"; g.fillRect(sx - 2, py - 56 * s, 4, 56 * s);
+  g.font = `800 ${Math.round(14 * s)}px "Big Shoulders Display", Impact, sans-serif`;
+  const label = camps[i].name.toUpperCase(), lw = g.measureText(label).width + 12;
+  g.fillStyle = "#f1e4c8"; g.fillRect(sx - lw / 2, py - 72 * s, lw, 20 * s);
+  g.fillStyle = "#26190f"; g.textAlign = "center"; g.fillText(label, sx, py - 57 * s);
+}
+function pennant(wx, s, color, label, tall) {
+  const by = cl.sy - (surf(wx) - cl.y), x = wx - camXNow, top = by - tall * s;
+  g.strokeStyle = "#e7edf1"; g.lineWidth = 3 * s; g.beginPath(); g.moveTo(x, by); g.lineTo(x, top); g.stroke();
+  const wob = REDUCED ? 0 : Math.sin(clock * 6) * 3;
+  g.fillStyle = color;
+  g.beginPath(); g.moveTo(x, top); g.quadraticCurveTo(x - 24 * s, top + wob * s, x - 50 * s, top + (11 + wob) * s); g.quadraticCurveTo(x - 24 * s, top + 16 * s, x, top + 26 * s); g.fill();
+  if (label) {
+    g.font = `500 ${Math.round(12 * s)}px "DM Mono", monospace`; g.textAlign = "right";
+    const w = g.measureText(label).width + 10;
+    g.fillStyle = "rgba(11,20,29,.82)"; g.fillRect(x - w + 2, top - 22 * s, w, 18 * s);
+    g.fillStyle = "#eef4f7"; g.fillText(label, x - 3, top - 9 * s);
+  }
+}
+
+function drawTool(lv, hx, hy, a) {
+  g.save(); g.translate(hx, hy); g.rotate(a); g.lineCap = "round";
+  if (lv <= 2) {
+    g.strokeStyle = lv === 1 ? "#8a5f35" : "#b9c4cb"; g.lineWidth = lv === 1 ? 4 : 2.6;
+    g.beginPath(); g.moveTo(0, -10); g.lineTo(5, 40); g.stroke();
+    if (lv === 2) { g.fillStyle = "#222"; g.fillRect(-2.5, -13, 5, 10); }
+  } else {
+    g.strokeStyle = lv === 3 ? "#54402c" : "#ff7a3d"; g.lineWidth = 4;
+    g.beginPath(); g.moveTo(0, 12);
+    if (lv === 3) g.lineTo(2, -30); else g.quadraticCurveTo(10, -10, 2, -30);
+    g.stroke();
+    g.fillStyle = "#d6e1e8";
+    g.beginPath(); g.moveTo(-8, -34); g.lineTo(22, -30); g.lineTo(26, -20); g.lineTo(6, -26); g.lineTo(-7, -26); g.fill();
+  }
+  g.restore();
+}
+function drawClimber(wx, wy, sx, sy, s) {
+  const axe = levelOf("axe"), boots = levelOf("boots"), rope = levelOf("rope"), lamp = levelOf("lamp"), o2 = levelOf("oxygen"), packed = gearKeys.reduce((n, k) => n + levelOf(k), 0);
+  const slope = slopeAt(wy), lean = .06 + Math.min(.26, slope * .15);
+  const jacket = ["#73838e", "#73838e", "#3e8d76", "#d8503a", "#d8503a", "#f2b824"][Math.min(5, boots + (boots > 2 ? 1 : 0))];
+  const pants = boots >= 4 ? "#d59c12" : boots >= 3 ? "#26303a" : "#44515c";
+  const bootColor = ["#c9b9a5", "#8d8478", "#6e4a2c", "#2e2e35", "#d8503a"][boots];
+  const sw = swingT > 0 ? Math.sin((1 - swingT) * Math.PI) : 0;
+
+  g.save(); g.translate(sx, sy); g.scale(s, s); g.rotate(lean * .55); g.lineCap = "round"; g.lineJoin = "round";
+  const leg = (ph, shade) => {
+    const fx = Math.sin(ph) * 15, fy = -Math.max(0, Math.cos(ph)) * 8;
+    g.strokeStyle = shade ? css(mix(rgb(pants), [0, 0, 0], .28)) : pants; g.lineWidth = 9;
+    g.beginPath(); g.moveTo(0, -42); g.lineTo(fx * .5 + 5, -21 + fy * .5); g.lineTo(fx, -5 + fy); g.stroke();
+    g.fillStyle = shade ? css(mix(rgb(bootColor), [0, 0, 0], .25)) : bootColor;
+    g.beginPath(); g.roundRect(fx - 6, -7 + fy, boots >= 4 ? 20 : 17, boots >= 2 ? 9 : 6, 2); g.fill();
+    if (boots >= 3) { g.fillStyle = "#d6e1e8"; for (let i = 0; i < 4; i++) { g.beginPath(); g.moveTo(fx - 4 + i * 5, 1 + fy); g.lineTo(fx - 2 + i * 5, 5 + fy); g.lineTo(fx + i * 5, 1 + fy); g.fill(); } }
+  };
+  /* back arm */
+  const bx = -2 + Math.sin(walk) * 8, by = -48;
+  leg(walk + Math.PI, true);
+  g.strokeStyle = css(mix(rgb(jacket), [0, 0, 0], .3)); g.lineWidth = 7;
+  g.beginPath(); g.moveTo(0, -64); g.lineTo(bx, by); g.stroke();
+  if (axe >= 5) drawTool(4, bx, by, .5 + Math.sin(walk) * .2);
+
+  /* pack grows with what you carry */
+  const pw = 10 + Math.min(10, packed * .9), ph = 22 + Math.min(14, packed * 1.1);
+  if (o2) { g.fillStyle = "#dfe7ec"; g.beginPath(); g.roundRect(-14 - pw - 3, -76, 9, 34, 4); g.fill(); g.fillStyle = "#ffc72e"; g.fillRect(-14 - pw - 3, -70, 9, 5); }
+  if (packed) { g.fillStyle = packed > 8 ? "#21557a" : "#5a4632"; g.beginPath(); g.roundRect(-10 - pw, -68, pw, ph, 4); g.fill(); }
+  if (rope) { g.strokeStyle = "#ff7a3d"; g.lineWidth = 3; g.beginPath(); g.ellipse(-8 - pw * .6, -72, 8 + rope, 4 + rope * .5, 0, 0, 7); g.stroke(); }
+  leg(walk, false);
+  /* torso */
+  g.fillStyle = jacket; g.beginPath(); g.roundRect(-10, -72, 20, 33, 7); g.fill();
+  if (rope >= 3) { g.strokeStyle = "#ffc72e"; g.lineWidth = 3; g.beginPath(); g.moveTo(-10, -44); g.lineTo(10, -44); g.stroke(); }
+  if (levelOf("gps")) { g.fillStyle = "#1b2530"; g.beginPath(); g.roundRect(2, -66, 8, 12, 2); g.fill(); g.fillStyle = "#6fdc8c"; g.fillRect(3.5, -64, 5, 5); }
+  /* head */
+  g.fillStyle = "#d7a886"; g.beginPath(); g.arc(3, -82, 9, 0, 7); g.fill();
+  if (rope >= 2) { g.fillStyle = "#f3f6f8"; g.beginPath(); g.arc(3, -84, 10, Math.PI, 0); g.fill(); g.fillRect(-7, -85, 20, 2.5); }
+  else if (boots >= 1) { g.fillStyle = "#2e6f88"; g.beginPath(); g.arc(3, -84, 9.5, Math.PI, 0); g.fill(); }
+  if (o2) { g.fillStyle = "#2f3b45"; g.beginPath(); g.roundRect(4, -82, 10, 9, 3); g.fill(); g.strokeStyle = "#2f3b45"; g.lineWidth = 2; g.beginPath(); g.moveTo(5, -74); g.quadraticCurveTo(-6, -66, -11, -72); g.stroke(); }
+  if (lamp) {
+    const dark = .25 + .75 * smooth(5000, 8200, alt), len = lamp > 1 ? 210 : 130;
+    const beam = g.createLinearGradient(12, -86, 12 + len, -60);
+    beam.addColorStop(0, `rgba(255,244,190,${.75 * dark})`); beam.addColorStop(1, "rgba(255,244,190,0)");
+    g.fillStyle = beam; g.beginPath(); g.moveTo(12, -86); g.lineTo(12 + len, -86 - len * .12); g.lineTo(12 + len, -86 + len * .42); g.fill();
+    g.fillStyle = "#fff6c4"; g.beginPath(); g.arc(12, -86, 3, 0, 7); g.fill();
+  }
+  /* front arm and tool */
+  const hx = 12 + Math.sin(walk + Math.PI) * 7 + sw * 8, hy = -52 - sw * 22;
+  g.strokeStyle = jacket; g.lineWidth = 7.5; g.beginPath(); g.moveTo(1, -65); g.lineTo(hx, hy); g.stroke();
+  g.fillStyle = axe >= 3 ? "#2b2f36" : "#d7a886"; g.beginPath(); g.arc(hx, hy, 4, 0, 7); g.fill();
+  if (axe) drawTool(axe, hx, hy, axe <= 2 ? -.12 + sw * -.7 : .35 - sw * 1.5 + 1.15 * swingT * swingT);
+  g.restore();
+}
+
+function draw() {
+  const a = alt, wy0 = a * K, wx0 = a <= 0 ? 0 : xForY(wy0);
+  const desktop = W >= 860, s = Math.max(.72, Math.min(1.1, H / 900)) * (desktop ? 1.05 : .9);
+  const camX = wx0 - (desktop ? W * .7 : W * .5); camXNow = camX;
+  const cy = desktop ? H * .62 : H * .56;
+  const wy = surf(wx0);
+  cl.sx = wx0 - camX; cl.sy = cy; cl.s = s; cl.x = wx0; cl.y = wy;
+  const toS = y => cy - (y - wy);
+
+  /* sky */
+  const [top, mid, low] = ramp(SKY, a);
+  const sky = g.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0, css(top)); sky.addColorStop(.58, css(mid)); sky.addColorStop(1, css(low));
+  g.fillStyle = sky; g.fillRect(0, 0, W, H);
+
+  /* stars */
+  const starA = smooth(5400, 8000, a);
+  if (starA > 0) {
+    for (let i = 0; i < 150; i++) {
+      const tw = REDUCED ? 1 : .6 + .4 * Math.sin(clock * 1.5 + i);
+      g.fillStyle = `rgba(255,255,255,${starA * tw * (.35 + hash(i) * .65)})`;
+      g.fillRect(hash(i + 40) * W, hash(i + 80) * H * .72, 1 + (i % 9 === 0), 1 + (i % 9 === 0));
+    }
+  }
+  /* sun rises through the climb */
+  const sunY = H * (.74 - .5 * Math.min(1, a / 4500)) + H * .75 * smooth(5000, 8400, a), sunX = W * (desktop ? .36 : .25);
+  if (a < 8000) {
+    const sg = g.createRadialGradient(sunX, sunY, 4, sunX, sunY, 150);
+    sg.addColorStop(0, "rgba(255,246,214,.95)"); sg.addColorStop(.16, "rgba(255,232,170,.55)"); sg.addColorStop(1, "rgba(255,232,170,0)");
+    g.fillStyle = sg; g.fillRect(sunX - 150, sunY - 150, 300, 300);
+  }
+  /* the ideal, far away */
+  const farA = 1 - smooth(3600, 5600, a);
+  if (farA > 0) {
+    const scale = (desktop ? 1 : .7) * (1 + a / 2800), px = W * (desktop ? .62 : .66), by = H * .6 + a * .02;
+    const pk = 310 * scale, wd = 250 * scale;
+    g.globalAlpha = farA;
+    g.fillStyle = css(mix(mid, [60, 80, 115], .55));
+    g.beginPath(); g.moveTo(px - wd, by); g.lineTo(px - wd * .22, by - pk * .66); g.lineTo(px, by - pk); g.lineTo(px + wd * .3, by - pk * .6); g.lineTo(px + wd, by); g.fill();
+    g.fillStyle = "rgba(245,250,255,.95)";
+    g.beginPath(); g.moveTo(px, by - pk); g.lineTo(px + wd * .16, by - pk * .78); g.lineTo(px + wd * .03, by - pk * .84); g.lineTo(px - wd * .06, by - pk * .74); g.lineTo(px - wd * .15, by - pk * .8); g.fill();
+    if (a < 1100) {
+      g.font = '500 12px "DM Mono", monospace'; g.textAlign = "center"; g.fillStyle = css([11, 20, 29], .85);
+      g.fillText("the ideal, 8,848 m", px, by - pk - 10);
+    }
+    g.globalAlpha = 1;
+  }
+  /* distant ranges sink as you rise above them */
+  [[.05, .5, 150, 1.2, .7], [.11, .62, 130, 4.1, .55], [.2, .76, 110, 2.6, .36]].forEach(([f, base, amp, seed, haze]) => {
+    const by = H * base + wy0 * f;
+    if (by - amp * 1.8 > H) return;
+    g.fillStyle = css(mix(mix(ramp(BIOME, a * .65)[0], [40, 62, 96], .5), low, haze));
+    g.beginPath(); g.moveTo(0, H);
+    for (let x = 0; x <= W + 12; x += 12) g.lineTo(x, by - ridge(x + camX * (f * 2.4), seed, amp));
+    g.lineTo(W, H); g.fill();
+  });
+  /* drifting cloud bands */
+  const wind = REDUCED ? 0 : clock * 9;
+  [1100, 2500, 4300, 5900, 7100].forEach((ca, bi) => {
+    const yy = cy - (ca * K - wy0) * .85;
+    if (yy < -80 || yy > H + 80) return;
+    for (let i = 0; i < 5; i++) {
+      const span = W + 400;
+      const cx = ((hash(bi * 9 + i) * span + wind * (1 + i * .15) - camX * .35) % span + span) % span - 200;
+      cloud(cx, yy + hash(i + bi) * 120 - 60, .8 + hash(i * 2 + bi) * .9, .52);
+    }
+  });
+  /* sea of cloud below the summit */
+  const seaA = smooth(6700, 8300, a);
+  if (seaA > 0) for (let i = 0; i < 14; i++) {
+    const span = W + 300, cx = ((i / 14) * span + wind * .4) % span - 150;
+    cloud(cx, H * (.84 + hash(i) * .13), 1.7 + hash(i + 3) * 1.4, .62 * seaA);
+  }
+
+  /* the climbable mountain */
+  const face = g.createLinearGradient(0, 0, 0, H);
+  for (let i = 0; i <= 6; i++) {
+    const hereAlt = (wy + (cy - H * i / 6)) / K;
+    face.addColorStop(i / 6, css(ramp(BIOME, Math.max(0, Math.min(8848, hereAlt)))[0]));
+  }
+  g.fillStyle = face;
+  g.beginPath(); g.moveTo(-10, H + 10);
+  for (let sx = -10; sx <= W + 10; sx += 7) g.lineTo(sx, toS(surf(camX + sx)));
+  g.lineTo(W + 10, H + 10); g.fill();
+
+  /* rock facets, trees, boulders on the slope */
+  const c0 = Math.floor(camX / 58) - 2, c1 = Math.floor((camX + W) / 58) + 2;
+  for (let i = c0; i <= c1; i++) {
+    const r1 = hash(i), r2 = hash(i + .37), r3 = hash(i + .71), wx = i * 58 + r1 * 34, sf = surf(wx), ca = sf / K, x = wx - camX, y = toS(sf);
+    if (ca > 2400) { g.fillStyle = `rgba(20,30,45,${ca > 6000 ? .07 : .13})`; g.beginPath(); g.moveTo(x, y + 2); g.lineTo(x + 24 + r2 * 60, y + 60 + r3 * 90); g.lineTo(x - 12 - r3 * 30, y + 80 + r2 * 150); g.fill(); }
+    const depth = 6 + r2 * r2 * H * .42;
+    const nearCamp = campX.some(c => Math.abs(wx - c) < 210);
+    if (ca < 3300 && r3 < (1 - ca / 3500) * .95 && !(nearCamp && depth < 40)) {
+      const h = (24 + r1 * 30) * s, tx = x, ty = y + depth, shade = mix([28, 66, 48], [46, 80, 66], r3);
+      g.fillStyle = "#3a2a1c"; g.fillRect(tx - 2, ty - 6, 4, 8);
+      g.fillStyle = css(shade);
+      for (let l = 0; l < 3; l++) { g.beginPath(); g.moveTo(tx - (h * .42 - l * 3.5), ty - 4 - l * h * .24); g.lineTo(tx, ty - h - l * 2 + (2 - l) * h * .18); g.lineTo(tx + (h * .42 - l * 3.5), ty - 4 - l * h * .24); g.fill(); }
+    } else if (ca > 1300 && ca < 7800 && r3 > .74) {
+      const b = (7 + r1 * 15) * s, ty = y + depth * .8;
+      g.fillStyle = ca > 6000 ? "#a9b6c0" : "#55575a";
+      g.beginPath(); g.moveTo(x - b, ty); g.lineTo(x - b * .35, ty - b * .8); g.lineTo(x + b * .5, ty - b * .6); g.lineTo(x + b, ty); g.fill();
+    }
+  }
+  /* crust along the ridge */
+  g.lineWidth = 4; g.strokeStyle = a > 5400 ? "rgba(255,255,255,.9)" : a > 2700 ? "rgba(214,214,205,.55)" : "rgba(170,214,120,.7)";
+  g.beginPath();
+  for (let sx = -10; sx <= W + 10; sx += 7) { const y = toS(surf(camX + sx)); sx === -10 ? g.moveTo(sx, y) : g.lineTo(sx, y); }
+  g.stroke();
+
+  camps.forEach((_, i) => campProps(i, s));
+  /* flags at the top */
+  if (Math.abs(SUMMIT_X - wx0) < W) {
+    if (levelOf("flag")) pennant(SUMMIT_X - 22 * s, s, "#ffc72e", null, 118);
+  }
+  /* fixed line trails behind the climber once roped up */
+  if (levelOf("rope") >= 3) {
+    g.strokeStyle = "#ff7a3d"; g.lineWidth = 2.5; g.beginPath(); g.moveTo(cl.sx - 8 * s, cy - 44 * s);
+    for (let d = 30; d <= 700; d += 30) g.lineTo(cl.sx - d, toS(surf(wx0 - d)) - 16 * s + Math.sin(d * .07) * 3);
+    g.stroke();
+  }
+  drawClimber(wx0, wy, cl.sx, cy + 2, s);
+
+  /* close foreground rocks */
+  const fgc = mix(ramp(BIOME, Math.min(8848, a + 300))[0], [10, 18, 28], .72);
+  g.fillStyle = css(fgc);
+  g.beginPath(); g.moveTo(0, H);
+  for (let x = 0; x <= W + 10; x += 10) g.lineTo(x, H - 18 - ridge(x + camX * 1.35, 7.7, 42) * (desktop ? 1 : .6));
+  g.lineTo(W, H); g.fill();
+
+  /* wind-driven snow */
+  const snow = smooth(3900, 7000, a);
+  if (snow > 0 && !REDUCED) {
+    g.strokeStyle = "#fff"; g.lineCap = "round";
+    const n = Math.floor(flakes.length * snow);
+    for (let i = 0; i < n; i++) {
+      const f = flakes[i], sp = 120 + 340 * snow;
+      const x = (((f.x * W - clock * sp * f.z - camX * f.z) % W) + W) % W, y = (((f.y * H + clock * 55 * f.z + wy0 * f.z) % H) + H) % H;
+      g.globalAlpha = .75 * f.z; g.lineWidth = 1.5 * f.z;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + 5 + 16 * snow * f.z, y - 3); g.stroke();
+    }
+    g.globalAlpha = 1;
+  }
+  /* summit cloud cap: the peak stays hidden until you break through */
+  const fog = .94 * Math.exp(-Math.pow((a - 8020) / 400, 2));
+  if (fog > .01) { g.fillStyle = `rgba(226,235,243,${fog})`; g.fillRect(0, 0, W, H); }
+
+  /* particles */
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy; p.vy += .16; p.life -= .022;
+    if (p.life <= 0) { particles.splice(i, 1); continue; }
+    g.globalAlpha = p.life; g.fillStyle = p.color; g.fillRect(p.x - p.r / 2, p.y - p.r / 2, p.r, p.r);
+  }
+  g.globalAlpha = 1;
+}
+
+
+/* --- Readouts and the climber's speech --- */
+let hudAlt = -1, lastSaid = null;
+const LAST_DATED = monthOf(CLIMB.lastDated);
+function updateHud() {
+  const a = Math.round(alt);
+  if (a === hudAlt) return;
+  hudAlt = a;
+  $("roAlt").textContent = fmt(a) + " m";
+  const m = Math.round(monthOfAlt(a));
+  $("roDate").textContent = m > LAST_DATED ? "Ahead" : `${MON[m % 12]} ${Math.floor(m / 12)}`;
+  $("marker").style.bottom = (a / 88.48) + "%";
+  document.querySelectorAll(".rail button").forEach(b => b.classList.toggle("passed", a >= camps[+b.dataset.camp].alt - 20));
+}
+/* The latest milestone he has passed, for the next few hundred metres */
+function updateBubble() {
+  const b = $("bubble");
+  let said = null;
+  for (const m of milestones) if (m.alt <= alt + 2) said = m;
+  if (!said || alt - said.alt > 420) { b.classList.add("fade"); lastSaid = null; return; }
+  if (said !== lastSaid) {
+    lastSaid = said;
+    const gearLine = said.gearNote ? `<span class="gear"><b>New gear:</b> ${said.gearNote}</span>` : "";
+    b.innerHTML = `<span class="when">${said.when}</span>${said.text}${gearLine}`;
+  }
+  b.hidden = false;
+  b.classList.remove("fade");
+  /* Next to the climber on wide screens; a caption under the top bar when a card is in the way */
+  const w = b.offsetWidth, h = b.offsetHeight;
+  const x = Math.max(16, Math.min(W - w - 56, cl.sx - w / 2));
+  const y = Math.max(64, cl.sy - 112 * cl.s - h);
+  let blocked = W < 860;
+  if (!blocked) for (const c of document.querySelectorAll(".card")) {
+    const r = c.getBoundingClientRect();
+    if (x < r.right && x + w > r.left && y < r.bottom && y + h > r.top) { blocked = true; break; }
+  }
+  b.classList.toggle("caption", blocked);
+  if (!blocked) {
+    b.style.transform = `translate(${x}px,${y}px)`;
+    b.style.setProperty("--tail", `${Math.max(14, Math.min(w - 14, cl.sx - x))}px`);
+  }
+}
+
+let prev = 0, prevGear = "";
+function frame(t) {
+  const dt = Math.min(.25, (t - prev) / 1000 || 0); prev = t;
+  if (!REDUCED) clock += dt;
+  const target = altFromScroll(), before = alt;
+  alt = REDUCED ? target : alt + (target - alt) * (1 - Math.exp(-dt * 7));
+  if (Math.abs(target - alt) < .4) alt = target;
+  walk += (alt - before) * .055;
+  gearNow = gearAt(alt);
+  const key = JSON.stringify(gearNow);
+  if (prevGear && key !== prevGear && alt > before) burst(cl.sx, cl.sy - 50 * cl.s, "#ffc72e", 30, 5);
+  prevGear = key;
+  draw();
+  updateHud();
+  updateBubble();
+  requestAnimationFrame(frame);
+}
+
+resize();
+measure();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+alt = altFromScroll();
+if (location.hash === "#summary") openSummary();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
